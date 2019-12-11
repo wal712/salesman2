@@ -38,11 +38,20 @@ function setup() {
 
 function draw() {
   background(20);
+
   // Draw Location Nodes
   stroke(255);
   fill(255);
   for (const vec of nodes) {
     ellipse(vec.x, vec.y, size, size);
+  }
+
+  // Draws Lex path
+  stroke(255, 0, 0);
+  for (let i = 0; i < bestLexOrder.size - 1; i++) {
+    vec1 = nodes.get(bestLexOrder.get(i));
+    vec2 = nodes.get(bestLexOrder.get(i + 1));
+    line(vec1.x, vec1.y, vec2.x, vec2.y);
   }
 
   // Print Lex scores
