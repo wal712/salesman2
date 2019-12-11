@@ -1,4 +1,4 @@
-// import { List, Range } from "immutable";
+// import * as lex from './lex.js';
 
 // Board Parameters
 let numNodes;
@@ -15,7 +15,7 @@ let currLexOrder;
 function setup() {
   createCanvas(800, 800);
 
-  numNodes = 9; //TODO: Make slider for controlling value
+  numNodes = 5; //TODO: Make slider for controlling value
   size = 20; // TODO: Slider for value control
 
   // Push numNodes random vectors to nodes list
@@ -58,7 +58,21 @@ function draw() {
   stroke(255, 0, 0);
   fill(255, 0, 0, 0.6);
   textSize(20);
+  // Should use p5.js round function instead
   text(`Brute Force Score: ${Math.round(bestLexScore, 2)}`, width - 250, 30);
+
+  // Get next Lex order and check if it's better than bestLexOrder
+  currLexOrder = nextLex(currLexOrder);
+  currLexScore = pathLength(currLexOrder);
+  if (currLexScore < bestLexScore) {
+    bestLexScore = currLexScore;
+  }
+
+  // Kills draw function if every permutation has been seen
+  if (currLexOrder.equals(indexes)) {
+    console.log('done!');
+    noLoop();
+  }
 }
 
 // Returns sum of distances between nodes in given order
@@ -71,3 +85,4 @@ function pathLength(order) {
   }
   return total;
 }
+
