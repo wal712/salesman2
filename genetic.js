@@ -34,6 +34,13 @@ function tourneySelect(currPool) {
 function breed(p1, p2) {
     const m1 = createMatrix(p1);
     const m2 = createMatrix(p2);
+
+    let fMatrix = Immutable.OrderedMap(); 
+    // Forms unions of sets from above matrices into new matrix
+    for (const key of m1.keys()) {
+        fMatrix = fMatrix.set(key, Immutable.Set.union([m1.get(key), m2.get(key)]));
+    }
+    
 }
 
 // Returns adjacency matrix of given path
