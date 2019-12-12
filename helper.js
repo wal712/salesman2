@@ -6,3 +6,14 @@ function swap(l, first, second) {
     newlist = newlist.update(first, val => val = temp);
     return newlist;
 }
+
+// Returns sum of distances between nodes in given order
+function pathLength(currNodes, order) {
+    let total = 0;
+    for (let i = 0; i < order.size - 1; i++) {
+        const vec1 = currNodes.get(order.get(i));
+        const vec2 = currNodes.get(order.get(i + 1));
+        total += dist(vec1.x, vec1.y, vec2.x, vec2.y);
+    }
+    return total;
+}

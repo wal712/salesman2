@@ -36,7 +36,7 @@ function setup() {
   // Initializes Lexocographic order 
   currLexOrder = indexes;
   bestLexOrder = indexes;
-  currLexScore = pathLength(currLexOrder);
+  currLexScore = pathLength(nodes, currLexOrder);
   bestLexScore = currLexScore;
 
   // Initializes Genetic algorithm
@@ -48,10 +48,10 @@ function setup() {
   for (let i = 0; i < genSize; i++) {
     const arr = shuffle(indexes.toArray());
     const temp = Immutable.List(arr);
-    generation = generation.push(temp);
+    const pLen = pathLength(nodes, temp);
+    generation = generation.push(Immutable.List([temp, pLen]));
     
     // Finds best offspring of initial generation 
-    const pLen = pathLength(temp);
     if (pLen < bestGenScore) {
       bestGenScore = pLen;
       bestGenOrder = temp;
@@ -87,7 +87,7 @@ function draw() {
 
   // Get next Lex order and check if it's better than bestLexOrder
   currLexOrder = nextLex(currLexOrder);
-  currLexScore = pathLength(currLexOrder);
+  currLexScore = pathLength(nodes, currLexOrder);
   if (currLexScore < bestLexScore) {
     bestLexScore = currLexScore;
     bestLexOrder = currLexOrder;
@@ -108,6 +108,7 @@ function draw() {
   text(`Best Gen Score: ${Math.round(bestGenScore, 2)}`, width - 250, 60);
 
   // Generates next generation and checks for better offspring
+  newGen(generation);
 
   // Kills draw function if every permutation has been seen
   if (currLexOrder.equals(indexes)) {
@@ -116,14 +117,5 @@ function draw() {
   }
 }
 
-// Returns sum of distances between nodes in given order
-function pathLength(order) {
-  let total = 0;
-  for (let i = 0; i < order.size - 1; i++) {
-    const vec1 = nodes.get(order.get(i));
-    const vec2 = nodes.get(order.get(i + 1));
-    total += dist(vec1.x, vec1.y, vec2.x, vec2.y);
-  }
-  return total;
-}
+
 
