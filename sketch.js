@@ -93,11 +93,21 @@ function draw() {
     bestLexOrder = currLexOrder;
   }
 
+  // Draws Gen path
+  stroke(0, 255, 0);
+  for (let i = 0; i < bestGenOrder.size - 1; i++) {
+    vec1 = nodes.get(bestGenOrder.get(i));
+    vec2 = nodes.get(bestGenOrder.get(i + 1));
+    line(vec1.x, vec1.y, vec2.x, vec2.y);
+  }
+
   // Print Gen scores
   stroke(0, 255, 0);
   fill(0, 255, 0);
   textSize(20);
   text(`Best Gen Score: ${Math.round(bestGenScore, 2)}`, width - 250, 60);
+
+  // Generates next generation and checks for better offspring
 
   // Kills draw function if every permutation has been seen
   if (currLexOrder.equals(indexes)) {
