@@ -21,7 +21,7 @@ let bestGenScore;
 function setup() {
   createCanvas(800, 800);
 
-  numNodes = 7; //TODO: Make slider for controlling value
+  numNodes = 11; //TODO: Make slider for controlling value
   size = 20; // TODO: Slider for value control
 
   // Push numNodes random vectors to nodes list

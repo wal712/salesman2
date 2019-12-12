@@ -8,6 +8,7 @@ function newGen(currGen, gSize) {
         const c1 = randIdx(pool.size);
         const c2 = randIdx(pool.size);
         let child = breed(pool.get(c1), pool.get(c2));
+        console.log(child.toString());
     }
 }
 
@@ -31,6 +32,7 @@ function tourneySelect(currPool) {
 }
 
 // Breeds new child from given two parents
+// Uses: https://en.wikipedia.org/wiki/Edge_recombination_operator
 function breed(p1, p2) {
     const m1 = createMatrix(p1);
     const m2 = createMatrix(p2);
@@ -41,6 +43,28 @@ function breed(p1, p2) {
         fMatrix = fMatrix.set(key, Immutable.Set.union([m1.get(key), m2.get(key)]));
     }
     
+    // Creates child
+    let child = Immutable.OrderedSet();
+    let n = p1.get(0);
+
+    while (child.size < p1.size) {
+        child = child.add(n);
+        let neighbors = fMatrix.get(n);
+        fMatrix = fMatrix.map(x => x.delete(n));
+
+        if (neighbors.size > 0) {
+            let smallest = neighbors.toArray()[0];
+            for (const key of neighbors) {
+                if (fMatrix.get(key).size < fMatrix.get(smallest).size) {
+                    smallest = key;
+                }
+            }
+            n = smallest;
+        } else {
+            n = randIdx(p1.size);
+        }
+    }
+    return Immutable.List(child);
 }
 
 // Returns adjacency matrix of given path
