@@ -17,3 +17,8 @@ function pathLength(currNodes, order) {
     }
     return total;
 }
+
+// Returns random index from given list size
+function randIdx(arrsize) {
+    return Math.floor(Math.random() * arrsize);
+}

@@ -1,14 +1,22 @@
 // Generates new generation
-function newGen(currGen) {
+function newGen(currGen, gSize) {
     const pool = tourneySelect(currGen);
+    let newPool = Immutable.List();
+
+    // breed gSize kids from random parents of pool
+    for (let i = 0; i < gSize; i++) {
+        const c1 = randIdx(pool.size);
+        const c2 = randIdx(pool.size);
+        let child = breed(pool.get(c1), pool.get(c2));
+    }
 }
 
 // Tournament selection method for generating new breeding pool
 function tourneySelect(currPool) {
     let newPool = Immutable.List();
     for (let i = 0; i < currPool.size; i++) {
-        const c1 = Math.floor(Math.random() * currPool.size);
-        const c2 = Math.floor(Math.random() * currPool.size);
+        const c1 = randIdx(currPool.size);
+        const c2 = randIdx(currPool.size);
         const p1 = currPool.get(c1);
         const p2 = currPool.get(c2);
 
@@ -20,4 +28,30 @@ function tourneySelect(currPool) {
         }
     }
     return newPool;
+}
+
+// Breeds new child from given two parents
+function breed(p1, p2) {
+    const m1 = createMatrix(p1);
+    const m2 = createMatrix(p2);
+}
+
+// Returns adjacency matrix of given path
+function createMatrix(path) {
+    const sorted = path.sort();
+    let matrix = Immutable.OrderedMap();
+
+    // Goes through each index in order and associates it with a set of its neighbors
+    for (const n of sorted) {
+        const idx = path.indexOf(n);
+
+        if (idx === path.size - 1) {
+            const temp = Immutable.Set([path.get(idx - 1), path.get(0)]);
+            matrix = matrix.set(n, temp);
+        } else {
+            const temp = Immutable.Set([path.get(idx - 1), path.get(idx + 1)]);
+            matrix = matrix.set(n, temp);
+        }
+    }
+    return matrix;
 }

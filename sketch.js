@@ -108,7 +108,7 @@ function draw() {
   text(`Best Gen Score: ${Math.round(bestGenScore, 2)}`, width - 250, 60);
 
   // Generates next generation and checks for better offspring
-  newGen(generation);
+  newGen(generation, genSize);
 
   // Kills draw function if every permutation has been seen
   if (currLexOrder.equals(indexes)) {
