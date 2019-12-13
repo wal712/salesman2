@@ -17,6 +17,7 @@ let genSize;
 let generation;
 let bestGenOrder;
 let bestGenScore;
+let mutationRate;
 
 function setup() {
   createCanvas(800, 800);
@@ -25,11 +26,12 @@ function setup() {
   size = 20; // TODO: Slider for value control
 
   // Push numNodes random vectors to nodes list
-  nodes = Immutable.List();
+  nodes = [];
   for (let i = 0; i < numNodes; i++) {
     let vec = createVector(Math.random() * width, Math.random() * height);
-    nodes = nodes.push(vec);
+    nodes.push(vec);
   }
+  nodes = Immutable.List(nodes);
 
   indexes = Immutable.Range(0, numNodes).toList();
 
@@ -41,6 +43,7 @@ function setup() {
 
   // Initializes Genetic algorithm
   genSize = 10; // TODO: Make Slider for value
+  mutationRate = 0.1; //TODO: same above
   generation = Immutable.List();
   bestGenScore = Infinity;
 
@@ -108,7 +111,7 @@ function draw() {
   text(`Best Gen Score: ${Math.round(bestGenScore, 2)}`, width - 250, 60);
 
   // Generates next generation and checks for better offspring
-  generation = newGen(nodes, generation, genSize);
+  generation = newGen(nodes, generation, genSize, mutationRate);
   for (const path of generation) {
     console.log(path.get(1));
     if (path.get(1) < bestGenScore) {

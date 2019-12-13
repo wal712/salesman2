@@ -1,5 +1,5 @@
 // Generates new generation
-function newGen(currNodes, currGen, gSize) {
+function newGen(currNodes, currGen, gSize, mRate) {
     const pool = tourneySelect(currGen);
     let newPool = Immutable.List();
 
@@ -8,10 +8,23 @@ function newGen(currNodes, currGen, gSize) {
         const c1 = randIdx(pool.size);
         const c2 = randIdx(pool.size);
         let child = breed(pool.get(c1), pool.get(c2));
+        child = mutate(child, mRate);
         let tlist = Immutable.List([child, pathLength(currNodes, child)]);
         newPool = newPool.push(tlist);
     }
     return newPool;
+}
+
+// random mRate chance to mutate each gene 
+function mutate(path, mRate) {
+    let newPath = path;
+    for (let i = 0; i < path.size; i++) {
+        if (Math.random() < mRate) {
+            newPath = swap(newPath, i, i - 1);
+            i++;
+        }
+    }
+    return newPath;
 }
 
 // Tournament selection method for generating new breeding pool
@@ -46,7 +59,7 @@ function breed(p1, p2) {
     }
     
     // Creates child
-    let child = Immutable.OrderedSet();
+    let child = Immutable.OrderedSet(); // Will be converted to List later, uses a set to prevent non unique individual genes
     let n = p1.get(0);
 
     while (child.size < p1.size) {
@@ -63,6 +76,11 @@ function breed(p1, p2) {
             }
             n = smallest;
         } else {
+            /* 
+                Technically this should select an index that isn't already in child.
+                However, since we are using a Set, nothing new will be added if a repeat is selected. 
+                So the loop will continue correctly.
+            */
             n = randIdx(p1.size);
         }
     }
