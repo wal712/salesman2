@@ -22,7 +22,7 @@ let mutationRate;
 function setup() {
   createCanvas(800, 800);
 
-  numNodes = 11; //TODO: Make slider for controlling value
+  numNodes = 20; //TODO: Make slider for controlling value
   size = 20; // TODO: Slider for value control
 
   // Push numNodes random vectors to nodes list
@@ -42,7 +42,7 @@ function setup() {
   bestLexScore = currLexScore;
 
   // Initializes Genetic algorithm
-  genSize = 10; // TODO: Make Slider for value
+  genSize = 20; // TODO: Make Slider for value
   mutationRate = 0.1; //TODO: same above
   generation = Immutable.List();
   bestGenScore = Infinity;
@@ -63,6 +63,8 @@ function setup() {
 
 }
 
+// TODO: Add functionality for user to add locations manually by clicking
+
 function draw() {
   background(20);
 
@@ -70,7 +72,14 @@ function draw() {
   stroke(255);
   fill(255);
   for (const vec of nodes) {
+    if (nodes.get(bestLexOrder.get(0)).equals(vec) || nodes.get(bestLexOrder.get(bestLexOrder.size - 1)).equals(vec)) {
+      fill(255, 0, 0);
+    } 
+    if (nodes.get(bestGenOrder.get(0)).equals(vec) || nodes.get(bestGenOrder.get(bestGenOrder.size - 1)).equals(vec)) {
+      fill(0, 255, 0);
+    }
     ellipse(vec.x, vec.y, size, size);
+    fill(255);
   }
 
   // Draws Lex path
@@ -113,7 +122,6 @@ function draw() {
   // Generates next generation and checks for better offspring
   generation = newGen(nodes, generation, genSize, mutationRate);
   for (const path of generation) {
-    console.log(path.get(1));
     if (path.get(1) < bestGenScore) {
       bestGenScore = path.get(1);
       bestGenOrder = path.get(0);

@@ -21,7 +21,7 @@ function mutate(path, mRate) {
     for (let i = 0; i < path.size; i++) {
         if (Math.random() < mRate) {
             newPath = swap(newPath, i, i - 1);
-            i++;
+            // i++;
         }
     }
     return newPath;
