@@ -108,7 +108,14 @@ function draw() {
   text(`Best Gen Score: ${Math.round(bestGenScore, 2)}`, width - 250, 60);
 
   // Generates next generation and checks for better offspring
-  newGen(generation, genSize);
+  generation = newGen(nodes, generation, genSize);
+  for (const path of generation) {
+    console.log(path.get(1));
+    if (path.get(1) < bestGenScore) {
+      bestGenScore = path.get(1);
+      bestGenOrder = path.get(0);
+    }
+  }
 
   // Kills draw function if every permutation has been seen
   if (currLexOrder.equals(indexes)) {

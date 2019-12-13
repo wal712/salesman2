@@ -1,5 +1,5 @@
 // Generates new generation
-function newGen(currGen, gSize) {
+function newGen(currNodes, currGen, gSize) {
     const pool = tourneySelect(currGen);
     let newPool = Immutable.List();
 
@@ -8,8 +8,10 @@ function newGen(currGen, gSize) {
         const c1 = randIdx(pool.size);
         const c2 = randIdx(pool.size);
         let child = breed(pool.get(c1), pool.get(c2));
-        console.log(child.toString());
+        let tlist = Immutable.List([child, pathLength(currNodes, child)]);
+        newPool = newPool.push(tlist);
     }
+    return newPool;
 }
 
 // Tournament selection method for generating new breeding pool
